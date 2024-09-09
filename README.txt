@@ -7,6 +7,7 @@ UPDATES:
 5. DEVELOPER mode: the y-button is the temporary debug button for touchscreen and key "d" still for keyboard user.
   go to ./index.html file, line 66, col 42 and remove disabled property to activate debug for touchscreen
 6. While in the air, player can now switch to the other side.
+7. Created the OPTIONS STATE simply to adjust volumes for now.
 
 TO-DO:
 1. tweak the camera class until a smooth effect will be created.

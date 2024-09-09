@@ -244,7 +244,7 @@ section#levelCompleteScreen div#buttons button{
     background-color: #102030;
     color: white;
     width: 20%;
-    height: 40%;
+    height: 90%;
     box-shadow: 5px 5px 5px black;
     margin: auto;
 }
@@ -445,6 +445,7 @@ section#levelSelectScreen #changeStateButtons button:hover{
     background-color: black;
 }
 
+/* OPTIONS SCREEN */
 section#optionsScreen{
     position: absolute;
     top: 50%;
@@ -457,4 +458,27 @@ section#optionsScreen{
     box-shadow: -20px -20px 20px black;
     border-radius: 3%;
     border: 2px solid black;
+    display: flex;
+    align-items: center;
+}
+
+section#optionsScreen div#sfx_div, section#optionsScreen div#vol_div{
+    border: 2px solid white;
+    width: 49%;
+    height: 20%;
+    display: flex;
+    margin: auto;
+}
+p#sfx_p, p#vol_p{
+    font-size: 0.6rem;
+    margin: auto;
+}
+section#optionsScreen input{
+    color: #102030;
+}
+section#optionsScreen #go-to{
+    position: absolute;
+    top: 4%;
+    right: 1%;
+    transform: translate(-1%, -4%);
 }

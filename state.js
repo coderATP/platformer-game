@@ -77,7 +77,7 @@ export class LoadingState extends GameState{
         if (this.game.assetManager.loadedAssets === this.game.assetManager.assetsToLoad) {
             this.game.ui.loading_startBtn.innerText = "all assets loaded, press anywhere to start";
             this.game.ui.loading_startBtn.addEventListener('click', (e) => {
-                this.game.audio.play(this.game.audio.buttonSound);
+                //this.game.audio.play(this.game.audio.buttonSound);
                 //this.game.toggleFullscreen();
                 this.game.gsm.enterState(new MenuState(this.game));
             })
@@ -104,20 +104,21 @@ export class MenuState extends GameState{
         super.update();
         //go to level-select state
         this.game.ui.menu_playBtn.addEventListener('click', ()=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.game.gsm.enterState(new LevelSelectState(this.game) );
         })
         this.game.ui.menu_optionsBtn.addEventListener('click', ()=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
+            this.game.gsm.enterState(new OptionsState(this.game));
         })
         this.game.ui.menu_leaderboardBtn.addEventListener('click', () => {
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
         })
         this.game.ui.menu_tutorialBtn.addEventListener('click', () => {
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
         })
         this.game.ui.menu_exitBtn.addEventListener('click', () => {
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
         })
     }
 }
@@ -190,7 +191,7 @@ export class PlayState extends GameState{
         //play pause-button sound
         //toggle pause-button text
         this.game.ui.play_pauseBtn.addEventListener('mousedown', (e)=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             if(e.target.innerText == "pause" && this.game.input.keypressed){
                 e.target.innerText = "play";
                 this.game.gsm.enterState(new PauseState(this.game));
@@ -298,17 +299,17 @@ export class PauseState extends GameState{
         super.update()
         //resume
         this.game.ui.pause_resumeBtn.addEventListener("click", ()=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.game.gsm.enterState(new PlayState(this.game));
         })
         //restart button click
         this.game.ui.pause_restartBtn.addEventListener('click', ()=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.game.gsm.enterState(new RestartConfirmState(this.game));
         })
         //go to main menu
         this.game.ui.pause_menuBtn.addEventListener('click', ()=>{
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.game.gsm.enterState(new MenuState(this.game));
             this.game.input.keypressed = false;
         })
@@ -345,7 +346,7 @@ export class RestartConfirmState extends GameState{
         //restart (yes button clicked)
         this.game.ui.restart_yesBtn.addEventListener("click", ()=>{
             this.game.player.score = 0;
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             if(this.game.currentLevel.id === "forest"){
                 this.game.currentLevel = new Forest(this.game);
             }
@@ -372,7 +373,6 @@ export class LevelSelectState extends GameState{
         const canvas = document.querySelector("#levelScreenshot_canvas");
         const ctx = canvas.getContext("2d");
         ctx.drawImage(this.game.ui.levelScreenshot, 0, 0, canvas.width, canvas.height);
-
     }
     
     setSelectedLevel() {
@@ -423,7 +423,7 @@ export class LevelSelectState extends GameState{
             //navigation with the arrows, intermediate
             //"next" arrow
             case "levelSelect_next":
-                this.game.audio.play(this.game.audio.buttonSound);
+                //this.game.audio.play(this.game.audio.buttonSound);
                 if(this.imageIndex < this.numberOfLevels - 1  && this.game.input.keypressed){
                     this.imageIndex++;
                     this.game.input.keypressed = false;
@@ -435,7 +435,7 @@ export class LevelSelectState extends GameState{
             break;
             //"previous" arrow
             case "levelSelect_previous":
-                this.game.audio.play(this.game.audio.buttonSound);
+                //this.game.audio.play(this.game.audio.buttonSound);
                 if(this.imageIndex  > 0 && this.game.input.keypressed){
                     this.imageIndex--;
                     this.game.input.keypressed = false;
@@ -462,7 +462,7 @@ export class LevelSelectState extends GameState{
     
     enterSelectedLevel(){
         if(this.game.input.keys[0] == "levelSelect_enter"){
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.setSelectedLevel();
             this.game.gsm.enterState(new FadeIn(this.game));
         }
@@ -483,7 +483,7 @@ export class LevelSelectState extends GameState{
         //GO BACK TO MENU
         //set current level to selected level first
         if(this.game.input.keys[0] == "levelSelect_back" && this.game.input.keypressed){
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             this.setSelectedLevel();
             this.game.gsm.enterState(new MenuState(this.game));
             this.game.input.keypressed = false;
@@ -523,7 +523,7 @@ export class LevelCompleteState extends GameState{
         //REPLAY THE SAME LEVEL
         if(this.game.input.keys[0] == "levelComplete_replayBtn" && this.game.input.keypressed){
             this.game.player.score = 0;
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             if(this.game.currentLevel.id === "forest"){
                 this.game.currentLevel = new Forest(this.game);
                 this.game.gsm.enterState(new FadeIn(this.game));
@@ -539,7 +539,7 @@ export class LevelCompleteState extends GameState{
         // 
         if(this.game.input.keys[0] == "levelComplete_nextBtn" && this.game.input.keypressed){
             this.game.player.score = 0;
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             if (this.game.currentLevel.id === "forest") {
                 this.game.currentLevel = new Ruins(this.game);
                 this.game.gsm.enterState(new FadeIn(this.game));
@@ -556,7 +556,7 @@ export class LevelCompleteState extends GameState{
         // so that when player presses "continue" (which doesn't exist yet) in menuState, he will be taken straight to the next level
         if(this.game.input.keys[0] == "levelComplete_menuBtn" && this.game.input.keypressed){
             this.game.player.score = 0;
-            this.game.audio.play(this.game.audio.buttonSound);
+            //this.game.audio.play(this.game.audio.buttonSound);
             if (this.game.currentLevel.id === "forest") {
                 this.game.currentLevel = new Ruins(this.game);
                 this.game.gsm.enterState(new MenuState(this.game));
@@ -599,11 +599,28 @@ export class OptionsState extends GameState{
     }
 
     render(ctx){
-
+        
     }
 
     update(deltaTime){
-
+        this.game.ui.volume_controllers.forEach(controller=>{
+            controller.addEventListener('change', (e)=>{
+                if(e.target.id == "options_sfx"){
+                    this.game.audio.sounds.forEach(sound=>{
+                        sound.volume = e.target.value * 0.1;
+                    })
+                }
+                else if(e.target.id == "options_music"){
+                    this.game.audio.songs.forEach(song=>{
+                        song.volume = e.target.value * 0.1;
+                    })
+                }
+            })
+        }) 
+        //BACK TO MENU
+        this.game.ui.options_menuBtn.addEventListener('click', ()=>{
+            this.game.gsm.enterState(new MenuState(this.game));
+        })
     }
 }
 
@@ -624,7 +641,7 @@ export class GSM{
                         new OptionsState(game)
                         ];
                         
-        this.currentState = this.states[9];
+        this.currentState = this.states[0];
         this.currentState.start();
     }
     

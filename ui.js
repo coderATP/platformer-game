@@ -1,6 +1,10 @@
 export class UI{
     constructor(){
+        //loading
         this.loading_startBtn = document.getElementById("loading_startBtn");
+        this.loadingBtns = [this.loading_startBtn];
+        
+        //menu
         this.menu_playBtn = document.getElementById("menu_playBtn");
         this.menu_optionsBtn = document.getElementById("menu_optionsBtn");
         this.menu_leaderboardBtn = document.getElementById("menu_leaderboardBtn");
@@ -8,10 +12,12 @@ export class UI{
         this.menu_exitBtn = document.getElementById("menu_exitBtn");
         this.menuBtns = [this.menu_playBtn, this.menu_optionsBtn, this.menu_leaderboardBtn, this.menu_tutorialBtn, this.menu_exitBtn];
         
+        //play
         this.fullscreenBtn = document.getElementById("play_fullscreenBtn");
         this.play_pauseBtn = document.getElementById("play_pauseBtn");
         this.play_specialBtn = document.getElementById("special");
-
+        
+        //level complete
         this.levelComplete_replayBtn = document.getElementById("levelComplete_replayBtn");
         this.levelComplete_nextBtn = document.getElementById("levelComplete_nextBtn");
         this.levelComplete_menuBtn = document.getElementById("levelComplete_menuBtn");
@@ -33,8 +39,15 @@ export class UI{
         //restart
         this.restart_yesBtn = document.getElementById("restart_yesBtn");
         this.restart_noBtn = document.getElementById("restart_noBtn");
-
         this.restartBtns = [this.restart_noBtn, this.restart_yesBtn];
         
+        //options
+        this.options_menuBtn = document.getElementById("options_backBtn");
+        this.optionsBtns = [this.options_menuBtn];
+        
+        //range for vol adjustment
+        this.sfx_controller = document.getElementById("options_sfx");
+        this.music_controller = document.getElementById("options_music");
+        this.volume_controllers = [this.sfx_controller, this.music_controller];
     }
 }

@@ -9,39 +9,94 @@ export class AudioControl{
         this.playStateSongs = [this.forestSong, this.ruinsSong]
         this.winSong = this.game.assetManager.sounds[5];
         this.buttonHoverSound = this.game.assetManager.sounds[6];
-
-        this.playStateSongs.forEach(song=>{
-            song.volume = 1;
+        
+        //ARRAY OF ALL SONGS
+        this.songs = [this.menuSong, ...this.playStateSongs, this.winSong];
+        //ARRAY OF ALL SOUNDS
+        this.sounds = [this.buttonSound, this.buttonHoverSound, this.coinSound];
+        
+        //loading state buttons?
+        this.game.ui.loadingBtns.forEach(btn=>{
+            //hover
+            btn.addEventListener("mouseover", ()=>{
+                this.play(this.buttonHoverSound);
+            })
+            //click
+            btn.addEventListener("click", ()=>{
+                this.play(this.buttonSound);
+            })
         })
-        this.menuSong.volume = 1;
-
-        //menu button hover
+        
+        //menu state buttons
         this.game.ui.menuBtns.forEach(btn=>{
+            //hover
             btn.addEventListener("mouseover", ()=>{
                 this.play(this.buttonHoverSound);
             })
+            //click
+            btn.addEventListener("click", ()=>{
+                this.play(this.buttonSound);
+            })
         })
-        //level select hover
+        
+        //level-select state buttons
         this.game.ui.levelSelectBtns.forEach(btn=>{
+            //hover
             btn.addEventListener("mouseover", ()=>{
                 this.play(this.buttonHoverSound);
             })
+            //click
+            btn.addEventListener("click", () => {
+                this.play(this.buttonSound);
+            })
         })
-        //pause state button hover
+        //pause state buttons
         this.game.ui.pauseBtns.forEach(btn=>{
+            //hover
             btn.addEventListener("mouseover", ()=>{
                 this.play(this.buttonHoverSound);
             })
+            //click
+            btn.addEventListener("click", () => {
+                this.play(this.buttonSound);
+            })
         })
-        //restart state button hover
+        //restart state buttons
         this.game.ui.restartBtns.forEach(btn=>{
+            //hover
             btn.addEventListener("mouseover", ()=>{
                 this.play(this.buttonHoverSound);
             })
+            //click
+            btn.addEventListener("click", () => {
+                this.play(this.buttonSound);
+            })
         })
-        //level complete state button hover
+        //level complete state buttons
         this.game.ui.levelCompleteBtns.forEach(btn=>{
+            //hover
             btn.addEventListener("mouseover", ()=>{
+                this.play(this.buttonHoverSound);
+            })
+            //click
+            btn.addEventListener("click", () => {
+                this.play(this.buttonSound);
+            })
+        })
+        //options state buttons
+        this.game.ui.optionsBtns.forEach(btn=>{
+            //hover
+            btn.addEventListener("mouseover", ()=>{
+                this.play(this.buttonHoverSound);
+            })
+            //click
+            btn.addEventListener("click", () => {
+                this.play(this.buttonSound);
+            })
+        })
+        //volume controller
+        this.game.ui.volume_controllers.forEach(controller=>{
+            controller.addEventListener('change', ()=>{
                 this.play(this.buttonHoverSound);
             })
         })
