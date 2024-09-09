@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>platformer game 10.0</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameWrapper">
+        <!--LOADING SCREEN-->
+        <section id="loadingScreen">
+            <button id = "loading_startBtn">LOADING...</button>
+        </section>
+        <!--MENU SCREEN-->
+        <section id="menuScreen">
+            <div id="button">
+                <button id="menu_playBtn">PLAY</button>
+                <button id="menu_optionsBtn">OPTION</button>   
+                <button id="menu_leaderboardBtn">LEADERBOARD</button>
+                <button id="menu_tutorialBtn">TUTORIAL</button>   
+                <button id="menu_exitBtn">EXIT</button>   
+            </div>
+        </section>
+        
+        <!--LEVEL-SELECT SCREEN-->
+        <section id="levelSelectScreen">
+            <div id="imageDiv">
+                <canvas id = "levelScreenshot_canvas">
+                    <img id="forest" src="images/maps/forest-complete.png" alt="levelScreenshot"/>
+
+                </canvas>
+                <p id="imageDescription">forest</p>
+                <div id="navigationButtons">
+                    <button class = "go-to" id="levelSelect_previous"> < </button>
+                    <button class = "go-to" id ="levelSelect_next"> > </button> 
+                </div>
+                <div id="navigationCircles">
+                    <button class = "go-to" id="levelSelect_forest">  O </button>
+                    <button class = "go-to" id ="levelSelect_ruins">  O  </button>
+                    <button class = "go-to" id ="levelSelect_crypt"> O </button>  
+                    <button class = "go-to" id ="levelSelect_cemetry"> O </button> 
+                </div>
+            </div>
+
+            <div id="changeStateButtons">
+                <button class = "go-to" id="levelSelect_enter">ENTER</button>
+                <button class = "go-to" id="levelSelect_back">BACK</button>    
+            </div>
+
+        </section>
+        
+        <!--PLAY SCREEN-->
+        <section id="playScreen">
+            <div id="canvasWrapper" width="1024" height="576">
+                <canvas id="canvas" width="1024" height="576"></canvas>  
+            </div>
+
+            <div id = "buttonsLayer">
+                <div id='leftControlButtons'>
+                    <button id='left' class='playButtons'>l</button>
+                        <button id='right' class='playButtons'>r</button>
+                        <button id='down' class='playButtons'>d</button>  
+                </div>
+                <div id='rightControlButtons'>
+                    <button id='special' class='playButtons' disabled>y</button>
+                    <button id='rangedShot' class='playButtons'>a</button>
+                    <button id='up' class='playButtons'>u</button>
+                    <button id='slash' class='playButtons'>s</button>
+                </div>
+                <div id="go-to">
+                    <button id="play_fullscreenBtn">fullscreen</button>
+                    <button id="play_pauseBtn">pause</button>
+
+                </div>
+            </div>
+        </section>
+        <!--CURTAIN-->
+        <section id="playSceneCurtain">
+                <div id= "message">
+                   <!-- <p>Curtains Rolling...</p>  -->
+                </div>
+        </section>
+        <!--PAUSE SCREEN-->
+        <section id="pauseScreen">
+            <button id="pause_resumeBtn">RESUME</button>
+            <button id="pause_restartBtn">RESTART</button>
+            <button id="pause_menuBtn">MENU</button>
+        </section>
+        <!-- RESTART CONFIRMATION DIALOGUE BOX -->
+        <section id="restartConfirmScreen">
+            <p>Are you sure you want to restart?</p>
+            <button id="restart_yesBtn">YES</button>
+            <button id="restart_noBtn">NO</button>
+        </section>
+        <!--END-OF-LEVEL SCREEN-->
+        <section id="levelCompleteScreen">
+            <div id="message">
+                <h1>Level Complete!</h1>
+                <div id="summary">
+                    <p id="score">Score:</p>
+                    <p id="time_bonus">Time bonus:</p>
+                </div>
+            </div>
+            <div id="buttons">
+                <button id="levelComplete_replayBtn">REPLAY</button>
+                <button id="levelComplete_nextBtn">NEXT</button>
+                <button id="levelComplete_menuBtn">MENU</button>
+            </div>
+            
+        </section>
+        <!--GAME OVER SCREEN-->
+        <section id="gameOverScreen">
+            <button id="gameOver_replayBtn">REPLAY</button>
+            <button id="gameOver_menuBtn">MENU</button>
+        </section>
+
+        <!--OPTIONS SCREEN-->
+        <section id="optionsScreen">
+            <p id="sfx_p">SFX: </p>
+            <input type="range" name="sfx" id="options_sfx" min = 0 max = 10>
+            <p id="vol_p"> VOLUME: </p>
+            <input type="range" name="music" id="options_music" min = 0 max = 10>
+        </section>
+
+    </div>
+
+    <script type = "module" src="script.js"></script>
+</body>
+</html>
