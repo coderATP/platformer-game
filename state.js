@@ -624,7 +624,7 @@ export class GSM{
                         new OptionsState(game)
                         ];
                         
-        this.currentState = this.states[0];
+        this.currentState = this.states[9];
         this.currentState.start();
     }
     
