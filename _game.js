@@ -1,6 +1,6 @@
 import { AssetManager } from "./assetManager.js"
 import { Camera } from "./camera.js"
-import { LoadingState, GSM, LevelCompleteState } from "./state.js"
+import { LoadingState, MenuState, LevelSelectState, FadeIn, PlayState, PauseState, RestartConfirmState, GSM, FadeOut, LevelCompleteState, GameOverState, OptionsState } from "./state.js"
 import { Input } from "./input.js"
 import { Backdrop, Background, Map } from "./map.js"
 import { Hero, HeroStateMachine } from "./hero.js"
@@ -42,7 +42,10 @@ export class Game{
         
         this.camera = new Camera(this, 0, 0, this.width, this.height, this.map.width, this.map.height);
         this.camera.follow(this.player, this.width*0.5, this.height*0.5);
-
+        
+        //game rows and columns
+        this.rows = undefined;
+        this.columns = undefined;
         //collisionBlock instance
         this.collisionBlock = new CollisionBlock(this);
         //collisonblocks data
@@ -67,11 +70,26 @@ export class Game{
         //LEVELS
         //create all enemies for the entire game duration created here:
         this.createEnemyPool();
+        
+        this.levels = [new Forest(this), new Ruins(this)];
         //the currentLevel sets all the undefined member variables pertaining to each level
-        this.currentLevel = new Forest(this);
+        this.currentLevel = this.levels[0];
+        
         //STATE MACHINES
         //game states
         this.gsm = new GSM(this);
+        this.STATES = {
+            LOADING: new LoadingState(this),
+            MENU: new MenuState(this),
+            LEVELSELECT: new LevelSelectState(this),
+            FADEIN: new FadeIn(this),
+            PLAY: new PlayState(this),
+            PAUSE: new PauseState(this),
+            FADEOUT: new FadeOut(this),
+            LEVELCOMPLETE: new LevelCompleteState(this),
+            RESTARTCONFIRM: new RestartConfirmState(this),
+            OPTIONS: new OptionsState(this)
+    };
         //hero and enemy state machines
         this.heroStateMachine = new HeroStateMachine(this);
         
@@ -104,11 +122,13 @@ export class Game{
         drawPlayerScore(ctx, this.player);
         
         drawHeroStatus(ctx, this.player);
+        
+        //this.drawGrid(ctx);
     }
     
     createEnemyPool(){
         for(let i = 0; i < this.gameTotalBasicEnemies; ++i){
-            this.enemies.unshift(new Enemy(this));
+            this.enemies.push(new Enemy(this));
         }
     }
 
@@ -120,6 +140,10 @@ export class Game{
     }
 
     update(deltaTime){
+        //update game rows and columns
+            this.rows = this.map.height/this.tileSize;
+            this.columns = this.map.width/this.tileSize;
+
         this.gsm.updateState(deltaTime);
     }
 
@@ -146,6 +170,23 @@ export class Game{
         }else if(document.exitFullscreen){
             document.exitFullscreen();
         }
+    }
+    
+    drawGrid(ctx){
+        for(let row = 0; row < this.rows; ++ row){
+            for(let col = 0; col < this.columns; ++col){
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(-this.camera.viewportX+col*this.tileSize, -this.camera.viewportY+row*this.tileSize, this.tileSize, this.tileSize);
+                //show numbers on grid
+                ctx.fillStyle = "white";
+                ctx.font = "13px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                const tileCentre = this.tileSize/2;
+                //ctx.fillText(-this.camera.viewportX+col+","+row, -this.camera.viewportY+col*this.tileSize + tileCentre, row*this.tileSize + tileCentre);
+            }
+        }
+        
     }
     
 }

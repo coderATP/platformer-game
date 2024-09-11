@@ -1,44 +1,78 @@
 import { level1_immobile_liquidMap2D, level1_solidMap2D, level2_solidMap2D, level2_immobile_liquidMap2D } from "./mapData.js";
 import { HorizontallyMovingCollisionBlock, VerticallyMovingCollisionBlock } from "./collisionblock.js";
 import { Rectangle } from "./rectangle.js";
+import { HeroFallRight } from "./hero.js";
 
 export class Forest{
     constructor(game){
         this.game = game;
         this.id = "forest";
+        this.game.exitDoor = new Rectangle(2520, 0, this.game.tileSize, this.game.tileSize);
+ 
+        this.resetCollisionBlocks();
+        this.resetMap();
+        this.resetCamera();
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        this.game.numberOfBasicEnemies = 10;
+        this.game.numberOfBosses = 1;
+    }
+    //reset all parameters to default values
+    reset(){
+        this.resetMap();
+        this.resetCamera();
+        this.resetCollisionBlocks();
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        this.game.player.score = 0;
+        this.game.exitDoor = new Rectangle(2520, 0, this.game.tileSize, this.game.tileSize);
+        this.id = "forest";
+    }
+    //reset only parameters needed to restart a level
+    restart(){
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        this.game.player.score = 0;
+    }
+    resetMap(){
+        this.game.map.setWorld(this.game.assetManager.images[1]);
+        this.game.background.set(this.game.assetManager.images[0]);
+        this.game.backdrop.set(this.game.assetManager.images[2]);
+    }
+    resetCollisionBlocks(){
         this.game.solidBlocks = this.game.collisionBlock.create(level1_solidMap2D);
         this.game.immobile_liquidBlocks = this.game.collisionBlock.create(level1_immobile_liquidMap2D);
         this.game.mobileBlocks = [
             new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[5], 21, 20, 36),
-            new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[5], 40, 20, 50), 
+            new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[5], 40, 20, 50),
             new VerticallyMovingCollisionBlock(this.game, this.game.assetManager.images[6], 20, 4, 20),
             new VerticallyMovingCollisionBlock(this.game, this.game.assetManager.images[6], 59, 1, 15),
             new VerticallyMovingCollisionBlock(this.game, this.game.assetManager.images[4], 39, 20, 30),
          ];
-        this.game.exitDoor = new Rectangle(2520, 0, this.game.tileSize, this.game.tileSize);
-        this.game.exitDoor.id = "toRuins";
-        this.game.map.setWorld(this.game.assetManager.images[1]);
-        this.game.background.set(this.game.assetManager.images[0]);
-        this.game.backdrop.set(this.game.assetManager.images[2]);
+    }
+    resetPlayerPos(){
+        this.game.player.x = this.game.player.y = 0;
+    }
+    resetEnemyPos(){
+        //deactivate all the enemies in the pool first
+        this.game.enemies.forEach(enemy => { enemy.reset(); });
+        this.game.enemies[0].start(6*this.game.tileSize, 29*this.game.tileSize);
+        this.game.enemies[1].start(3*this.game.tileSize, 40*this.game.tileSize);
+        this.game.enemies[2].start(19*this.game.tileSize, 25*this.game.tileSize);
+        this.game.enemies[3].start(24*this.game.tileSize, 34*this.game.tileSize);
+        this.game.enemies[4].start(33*this.game.tileSize, 1*this.game.tileSize);
+        this.game.enemies[5].start(33*this.game.tileSize, 24*this.game.tileSize);
+        this.game.enemies[6].start(48*this.game.tileSize, 13*this.game.tileSize);
+        this.game.enemies[7].start(41*this.game.tileSize, 26*this.game.tileSize);
+        this.game.enemies[8].start(45*this.game.tileSize, 33*this.game.tileSize);
+        this.game.enemies[9].start(59*this.game.tileSize, 34*this.game.tileSize);
+}
+    
+    resetCamera() {
         this.game.camera.worldWidth = this.game.map.width;
-        this.game.camera.worldHeight = this.game.map.height;
-        
-        this.game.player.x = 0;
-        this.game.player.y = 200;
+        this.game.camera.worldHeight = this.game.map.height ;
         this.game.camera.viewportX = 0;
         this.game.camera.viewportY = 0;
-       // this.game.camera.follow(this.game.player);
-        this.game.numberOfBasicEnemies = 2;
-        //deactivates all the enemies in the pool
-        this.game.enemies.forEach(enemy=>{enemy.reset();})
-        //activates only the numberOfBasicEnemies
-        for(let i = 0; i < this.game.gameTotalBasicEnemies; ++i){
-            if(i < this.game.numberOfBasicEnemies){
-                this.game.enemies[i].start(200+i* 200, 0);
-            }
-        }
-        this.game.numberOfBosses = 1;
-
     }
 }
 
@@ -46,9 +80,39 @@ export class Ruins{
     constructor(game){
         this.game = game;
         this.id = "ruins";
+        this.game.exitDoor = new Rectangle(5080, 0, this.game.tileSize, this.game.tileSize);
+       
+        this.resetCollisionBlocks();
+        this.resetMap();
+        this.resetCamera();
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        //activates only the numberOfBasicEnemies
+        this.game.numberOfBasicEnemies = 15;
+        this.game.numberOfBosses = 1;
+    }
+    
+    //reset all parameters to default values
+    reset(){
+        this.resetMap();
+        this.resetCamera();
+        this.resetCollisionBlocks();
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        this.game.player.score = 0;
+        this.game.exitDoor = new Rectangle(5080, 0, this.game.tileSize, this.game.tileSize);
+        this.id = "ruins";
+    }
+    //reset only parameters needed to restart a level
+    restart(){
+        this.resetPlayerPos();
+        this.resetEnemyPos();
+        this.game.player.score = 0;
+    }
+    resetCollisionBlocks(){
         this.game.solidBlocks = this.game.collisionBlock.create(level2_solidMap2D);
         this.game.immobile_liquidBlocks = this.game.collisionBlock.create(level2_immobile_liquidMap2D);
-        this.game.mobileBlocks  = [
+        this.game.mobileBlocks = [
             new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[4], 2, 28, 24),
             new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[4], 25, 16, 32),
             new HorizontallyMovingCollisionBlock(this.game, this.game.assetManager.images[4], 43, 33, 48),
@@ -65,29 +129,38 @@ export class Ruins{
             new VerticallyMovingCollisionBlock(this.game, this.game.assetManager.images[4], 105, 18, 32),
 
          ];
-        this.game.exitDoor = new Rectangle(5080, 0, this.game.tileSize, this.game.tileSize);
-        this.game.exitDoor.id = "toForest";
-
+    }
+    resetMap(){
         this.game.map.setWorld(this.game.assetManager.images[11]);
         this.game.background.set(this.game.assetManager.images[11]);
-        this.game.backdrop.set(this.game.assetManager.images[11]);
+        this.game.backdrop.set(this.game.assetManager.images[11]); 
+    }
+    resetPlayerPos(){
+        this.game.player.x = this.game.player.y = 0;
+    }
+    resetEnemyPos(){
+        //deactivate all the enemies in the pool first
+        this.game.enemies.forEach(enemy => { enemy.reset(); });
+        this.game.enemies[0].start(0*this.game.tileSize, 29*this.game.tileSize);
+        this.game.enemies[1].start(3*this.game.tileSize, 36*this.game.tileSize);
+        this.game.enemies[2].start(9*this.game.tileSize, 19*this.game.tileSize);
+        this.game.enemies[3].start(24*this.game.tileSize, 34*this.game.tileSize);
+        this.game.enemies[4].start(36*this.game.tileSize, 15*this.game.tileSize);
+        this.game.enemies[5].start(33*this.game.tileSize, 28*this.game.tileSize);
+        this.game.enemies[6].start(51*this.game.tileSize, 13*this.game.tileSize);
+        this.game.enemies[7].start(45*this.game.tileSize, 26*this.game.tileSize);
+        this.game.enemies[8].start(45*this.game.tileSize, 33*this.game.tileSize);
+        this.game.enemies[9].start(69*this.game.tileSize, 5*this.game.tileSize);
+        this.game.enemies[10].start(89*this.game.tileSize, 5*this.game.tileSize);
+        this.game.enemies[11].start(97*this.game.tileSize, 28*this.game.tileSize);
+        this.game.enemies[12].start(115*this.game.tileSize, 40*this.game.tileSize);
+        this.game.enemies[13].start(120*this.game.tileSize, 19*this.game.tileSize);
+        this.game.enemies[14].start(127*this.game.tileSize, 3*this.game.tileSize);
+    }
+    resetCamera(){
         this.game.camera.worldWidth = this.game.map.width;
         this.game.camera.worldHeight = this.game.map.height;
-        
-        this.game.player.x = 0;
-        this.game.player.y = 200;
         this.game.camera.viewportX = 0;
         this.game.camera.viewportY = 0;
-        
-        //deactivates all the enemies in the pool
-        this.game.enemies.forEach(enemy=>{enemy.reset();})
-        //activates only the numberOfBasicEnemies
-        this.game.numberOfBasicEnemies = 15;
-        for(let i = 0; i < this.game.gameTotalBasicEnemies; ++i){
-            if(i < this.game.numberOfBasicEnemies){
-                this.game.enemies[i].start(200+i* 200, 0);
-            }
-        }
-        this.game.numberOfBosses = 1;
     }
 }

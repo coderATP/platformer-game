@@ -27,6 +27,7 @@ export class Enemy extends Character{
         this.attackInterval = 2000;
         this.attackUpdate = false;
         this.enterState(new EnemyIdleRight());
+        
     }
     
     updatehitboxes(){
@@ -91,13 +92,16 @@ export class Enemy extends Character{
                    //enemy dies
                    if(this.lives < 1){
                        this.game.player.score+= this.maxLives;
-                       this.reset();
+                       this.free = true;
                    }
             }
         }
     }
 
     start(x, y){
+        const offsetY = (this.y+this.height) - (this.collisionbox.y+this.collisionbox.height)
+        const offsetX = this.collisionbox.x - this.x;
+ 
         this.x = x;
         this.y = y;
         this.lives = this.maxLives; 

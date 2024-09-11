@@ -3,7 +3,7 @@ import { Game } from "./_game.js";
 
 window.addEventListener('load', ()=>{
     const canvas = document.getElementById('canvas');
-    canvas.width = 1024;
+    canvas.width = 1280 || 5120;
     canvas.height = 576;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;

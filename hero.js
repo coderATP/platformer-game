@@ -23,6 +23,9 @@ export class Hero extends Character{
         this.state = "idleLeft"
     }
     
+    reset(){
+        this.x = this.y = 0;
+    }
     autoReplenishEnergy(){
         if( (this.energy < this.maxEnergy) ){
             this.energy+= 0.1;
@@ -273,7 +276,7 @@ export class HeroDeathLeft extends HeroState{
 
     }
 }
-class HeroFallRight extends HeroState{
+export class HeroFallRight extends HeroState{
     enter(){
         this.game.player.setSprite(6, 2);
         this.game.player.staggerSpeed = 160;
