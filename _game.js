@@ -2,7 +2,7 @@ import { AssetManager } from "./assetManager.js"
 import { Camera } from "./camera.js"
 import { LoadingState, MenuState, LevelSelectState, FadeIn, PlayState, PauseState, RestartConfirmState, GSM, FadeOut, LevelCompleteState, GameOverState, OptionsState } from "./state.js"
 import { Input } from "./input.js"
-import { Backdrop, Background, Map } from "./map.js"
+import { Map } from "./map.js"
 import { Hero, HeroStateMachine } from "./hero.js"
 import { UI } from "./ui.js"
 import { level1_solidMap2D, level1_immobile_liquidMap2D, level2_solidMap2D, level2_immobile_liquidMap2D } from "./mapData.js";
@@ -13,6 +13,7 @@ import { lerp } from "./ease.js"
 import { Forest, Ruins } from "./levels.js"
 import { Enemy } from "./enemypool.js"
 import { AudioControl } from "./audio.js"
+import { FloatingMessage } from "./floatingMessage.js"
 
 export class Game{
     constructor(canvas){
@@ -34,14 +35,14 @@ export class Game{
 
         //MAP, PLAYER AND CAMERA
         this.map = new Map(this);
-        this.backdrop = new Backdrop(this);
-        this.background = new Background(this);
+        //this.backdrop = new Map(this);
+        //this.background = new Map(this);
         this.player = new Hero(this);
         this.enemy = new Enemy(this);
         this.enemy.start(400, 0);
         
         this.camera = new Camera(this, 0, 0, this.width, this.height, this.map.width, this.map.height);
-        this.camera.follow(this.player, this.width*0.5, this.height*0.5);
+        this.camera.follow(this.player);
         
         //game rows and columns
         this.rows = undefined;
@@ -103,6 +104,9 @@ export class Game{
         this.ui.play_specialBtn.addEventListener('mouseup', () => {
             this.debug = !this.debug;
         });
+        
+        //FLOATING MESSAGES
+        this.floatingMessages = [];
     }
     
     render(ctx, deltaTime){
@@ -110,12 +114,17 @@ export class Game{
         this.gsm.renderState(ctx, deltaTime);
         
         //temp
-        this.enemies.forEach(enemy=>{
+        this.enemies.forEach((enemy, i)=>{
             if(!enemy.free){
                 drawEnemyhealthbar(this, ctx, enemy);
+                ctx.fillStyle = "gold";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "30px Arial";
+                ctx.fillText(i, -this.camera.viewportX+enemy.collisionbox.x + enemy.collisionbox.width*0.5, -this.camera.viewportY+enemy.collisionbox.y);
             } 
         })
-
+        
         drawCharacterStatus(ctx, this.enemies[0]);
         drawPlayerhealthbar(ctx, this.player);
         drawPlayerenergybar(ctx, this.player);
@@ -124,6 +133,7 @@ export class Game{
         drawHeroStatus(ctx, this.player);
         
         //this.drawGrid(ctx);
+        this.floatingMessages.forEach(message=>{message.render(ctx)})
     }
     
     createEnemyPool(){
@@ -139,12 +149,13 @@ export class Game{
         }
     }
 
-    update(deltaTime){
+    update(ctx, deltaTime){
         //update game rows and columns
-            this.rows = this.map.height/this.tileSize;
-            this.columns = this.map.width/this.tileSize;
-
-        this.gsm.updateState(deltaTime);
+        this.rows = this.map.height/this.tileSize;
+        this.columns = this.map.width/this.tileSize;
+        this.floatingMessages.forEach(message=>{message.update()})
+        this.floatingMessages = this.floatingMessages.filter(message=> !message.markedForDeletion );
+        this.gsm.updateState(ctx, deltaTime);
     }
 
     rectangularCollision(a, b){

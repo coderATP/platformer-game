@@ -1,7 +1,6 @@
-import { lerp } from "./ease.js";
 import { HeroDeathLeft, HeroDeathRight, HeroTakeHitWhiteLeft, HeroTakeHitWhiteRight } from "./hero.js";
-import { Character } from "./player.js";
-import { HeroAttack1Right, HeroAttack1Left, HeroAttack2Left, HeroAttack2Right } from "./hero.js"
+import { Character } from "./character.js";
+import { FloatingMessage } from "./floatingMessage.js"
 
 export class Enemy extends Character{
     constructor(game){
@@ -24,7 +23,7 @@ export class Enemy extends Character{
         
         //attack properties
         this.attackCounter = 0;
-        this.attackInterval = 2000;
+        this.attackInterval = 3000;
         this.attackUpdate = false;
         this.enterState(new EnemyIdleRight());
         
@@ -69,7 +68,6 @@ export class Enemy extends Character{
     update(deltaTime){
         if( (!this.free))  {
             super.update(deltaTime);
-            this.updateAttack(deltaTime);
             //enemy changes behaviour
             this.state.changeBehaviour(this.game, this, deltaTime);
             //new code for player's behavioural change called here
@@ -78,23 +76,42 @@ export class Enemy extends Character{
         }
         //collision
         //enemy and hero
-        if(!this.free && this.game.rectangularCollision(this.game.player.attackbox, this.collisionbox)){
-            if( this.game.player.state == "attack1Right" ||
-                this.game.player.state == "attack2Right" ||
-                this.game.player.state == "attack1Left" ||
-                this.game.player.state == "attack2Left"
-               ){
-                   //enemy takes hit
-                   if(this.game.input.keypressed){
-                       this.takenHit();
-                       this.game.input.keypressed = false;
-                   }
-                   //enemy dies
-                   if(this.lives < 1){
-                       this.game.player.score+= this.maxLives;
-                       this.free = true;
-                   }
-            }
+        //while player is attacking and truly within attack range
+        if(!this.free && this.game.rectangularCollision(this.game.player.attackbox, this.collisionbox) &&
+            ( this.game.player.state == "attack1Right" ||
+            this.game.player.state == "attack2Right" ||
+            this.game.player.state == "attack1Left" ||
+            this.game.player.state == "attack2Left"
+            ) ){
+                //play takeHit animation when player is idle
+                if(this.currentState == "idleRight"){
+                    this.enterState(new EnemyTakeHitRight()) 
+                }
+                else if(this.currentState == "idleLeft"){
+                    this.enterState(new EnemyTakeHitLeft())
+                }
+                //enemy takes hit
+                if(this.game.input.keypressed){
+                    this.takenHit();
+                    this.game.input.keypressed = false;
+                }
+                //enemy dies
+                if(this.lives < 1){
+                    //play player-collects-coins audio
+                    this.game.audio.play(this.game.audio.coinSound);
+                    this.game.player.score+= this.maxLives;
+                    //push a floating score to the scoreboard
+                    const rightMargin = 30;
+                    const topMargin = 50;
+                    this.game.floatingMessages.push(new FloatingMessage(this.game,
+                             "+"+this.maxLives,
+                             this.collisionbox.x,
+                             this.collisionbox.y,
+                             this.game.width+this.game.camera.viewportX-rightMargin,
+                             this.game.camera.viewportY+ topMargin
+                             ))
+                    this.free = true;
+                }
         }
     }
 
@@ -116,6 +133,8 @@ export class Enemy extends Character{
      
     takenHit() {
         this.lives -= this.game.player.damage;
+        //play takenHit audio
+        //this.game.audio.play(this.game.audio.winSong);
     }
     
      enterState(state){
@@ -157,8 +176,8 @@ class EnemyIdleRight extends EnemyState{
     }
 
     changeBehaviour(game, enemy, deltaTime){
+        enemy.updateAttack(deltaTime);
         const player = game.player;
-        
         //when in attack range and the sword actually collides with player
         if(enemy.attackbox.x + enemy.attackbox.width >= player.collisionbox.x &&
             enemy.attackbox.x <= player.collisionbox.x + player.collisionbox.width && 
@@ -204,6 +223,7 @@ class EnemyIdleLeft extends EnemyState{
     }
 
     changeBehaviour(game, enemy, deltaTime){
+        enemy.updateAttack(deltaTime);
         const player = game.player;
         if(enemy.attackbox.x <= player.collisionbox.x + player.collisionbox.width &&
             enemy.attackbox.x + enemy.attackbox.width >= player.collisionbox.x  && 
@@ -246,7 +266,6 @@ export class EnemyRunRight extends EnemyState{
         enemy.staggerSpeed = 80;
     }
     changeBehaviour(game, enemy, deltaTime){
-        //this.canAttack(deltaTime);
         const player = game.player;
             //idle when in attack range
             if(enemy.attackbox.x + enemy.attackbox.width >= player.collisionbox.x &&
@@ -272,7 +291,6 @@ export class EnemyRunLeft extends EnemyState{
         enemy.staggerSpeed = 80;
     }
     changeBehaviour(game, enemy, deltaTime){
-       // this.canAttack(deltaTime);
         const player = game.player;
         //while running and player suddenly runs away from battlezone, leftwards
         if(!enemy.withinBattleZone(player) &&
@@ -301,7 +319,6 @@ export class EnemyAttack1Right extends EnemyState{
     }
 
     changeBehaviour(game, enemy, deltaTime){
-        //this.canAttack(deltaTime);
         const player = game.player;
         if(player.lives > 0){
             if(player.lastDirection ==="left"){
@@ -339,7 +356,6 @@ export class EnemyAttack1Left extends EnemyState{
         enemy.staggerSpeed = 80;
     }
     changeBehaviour(game, enemy, deltaTime){
-        //this.canAttack(deltaTime);
         const player = game.player;
         if(player.lives > 0){
             if(player.lastDirection ==="left"){
@@ -376,7 +392,6 @@ export class EnemyAttack2Right extends EnemyState{
         enemy.staggerSpeed = 80;
     }
     changeBehaviour(game, enemy, deltaTime){
-        //this.canAttack(deltaTime);
         const player = game.player;
 
         if(player.lives > 0){
@@ -414,7 +429,6 @@ export class EnemyAttack2Left extends EnemyState{
         enemy.staggerSpeed = 80;
     }
     changeBehaviour(game, enemy, deltaTime){
-        //this.canAttack(deltaTime);
         const player = game.player;
 
         if(player.lives > 0){

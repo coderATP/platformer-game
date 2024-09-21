@@ -1,9 +1,6 @@
 
 import { GameObject } from "./gameObject.js"
 import { Star, Dust} from "./particle.js"
-import { lerp } from "./ease.js"
-
-
 
 export class Character extends GameObject{
     constructor(game){
@@ -12,7 +9,7 @@ export class Character extends GameObject{
         this.width = 200;
         this.height = 200;
         this.x = this.y = 0;
-        this.color = "rgba(255, 255, 255, 0.6)"
+        this.color = "rgba(255, 255, 255, 0.6)";
         this.right = this.x + this.width;
         this.bottom = this.y + this.height;
         
@@ -183,6 +180,8 @@ export class Character extends GameObject{
     }
 
     update(deltaTime){
+        //update centre coordinates
+        this.updateCentre();
         //player state behaviour
         this.animate(deltaTime);
         this.x += this.speedX * (deltaTime/1000) * this.speedBufferX;

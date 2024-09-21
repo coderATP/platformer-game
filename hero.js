@@ -1,6 +1,4 @@
-import { lerp } from "./ease.js";
-import { EnemyTakeHitRight, EnemyTakeHitLeft, EnemyDeathRight, EnemyDeathLeft } from "./enemypool.js";
-import { Character } from "./player.js";
+import { Character } from "./character.js";
 
 export class Hero extends Character{
     constructor(game){
@@ -104,31 +102,7 @@ export class HeroAttack1Right extends HeroState{
     }
     changeBehaviour(enemy, deltaTime){
         const player = this.game.player;
-            //enemy takes damage
             if(this.animationExecuted()){
-                //opponent (enemy) "take hit" and "death" animations play
-                if(enemy.lives > 0){
-                    if(player.attackbox.x + player.attackbox.width >= enemy.collisionbox.x &&
-                        player.attackbox.x <= enemy.collisionbox.x + enemy.collisionbox.width &&
-                        enemy.withinAttackRangeY(player)
-                    ){
-                        if(enemy.lastDirection === "right"){
-                            enemy.enterState(new EnemyTakeHitRight());
-                        }
-                        else{
-                            enemy.enterState(new EnemyTakeHitLeft());
-                        } 
-                    }
-                }
-                else{
-                    if(enemy.lastDirection === "right"){
-                        enemy.enterState(new EnemyDeathRight())
-                    }
-                    else{
-                        enemy.enterState(new EnemyDeathLeft())
-                    }
-                }
-
                 this.game.heroStateMachine.enterState(new HeroIdleRight(this.game));
             }
     }
@@ -143,32 +117,7 @@ export class HeroAttack1Left extends HeroState{
     }
     changeBehaviour(enemy, deltaTime){
         const player = this.game.player;
-        
-            //enemy takes damage
             if(this.animationExecuted()){
-                //opponent (enemy) "take hit" and "death" animations play
-                if(enemy.lives > 0){
-                    if(player.attackbox.x <= enemy.collisionbox.x + enemy.collisionbox.width &&
-                        player.attackbox.x + player.attackbox.width >= enemy.collisionbox.x &&
-                        enemy.withinAttackRangeY(player)
-                    ){
-                        if(enemy.lastDirection === "right"){
-                            enemy.enterState(new EnemyTakeHitRight());
-                        }
-                        else{
-                            enemy.enterState(new EnemyTakeHitLeft());
-                        } 
-                    }
-                }
-                else{
-                    if(enemy.lastDirection === "right"){
-                        enemy.enterState(new EnemyDeathRight())
-                    }
-                    else{
-                        enemy.enterState(new EnemyDeathLeft())
-                    }
-                }
-
                 this.game.heroStateMachine.enterState(new HeroIdleLeft(this.game));
             }
     }
@@ -184,30 +133,7 @@ export class HeroAttack2Right extends HeroState{
     changeBehaviour(enemy, deltaTime){
         const player = this.game.player;
         
-            //enemy takes damage
             if(this.animationExecuted()){
-                //opponent (enemy) "take hit" and "death" animations play
-                if(enemy.lives > 0){
-                    if(player.attackbox.x + player.attackbox.width >= enemy.collisionbox.x &&
-                        player.attackbox.x <= enemy.collisionbox.x + enemy.collisionbox.width &&
-                        enemy.withinAttackRangeY(player)
-                    ){
-                        if(enemy.lastDirection === "right"){
-                            enemy.enterState(new EnemyTakeHitRight());
-                        }
-                        else{
-                            enemy.enterState(new EnemyTakeHitLeft());
-                        } 
-                    }
-                }
-                else{
-                    if(enemy.lastDirection === "right"){
-                        enemy.enterState(new EnemyDeathRight())
-                    }
-                    else{
-                        enemy.enterState(new EnemyDeathLeft())
-                    }
-                }
                 this.game.heroStateMachine.enterState(new HeroIdleRight(this.game));
             }
     }
@@ -223,32 +149,7 @@ export class HeroAttack2Left extends HeroState{
 
     changeBehaviour(enemy, deltaTime){
         const player = this.game.player;
-        
-            //enemy takes damage
             if(this.animationExecuted()){
-                //opponent (enemy) "take hit" and "death" animations play
-                if(enemy.lives > 0){
-                    if(player.attackbox.x <= enemy.collisionbox.x + enemy.collisionbox.width &&
-                        player.attackbox.x + player.attackbox.width >= enemy.collisionbox.x &&
-                        enemy.withinAttackRangeY(player)
-                    ){
-                        if(enemy.lastDirection === "right"){
-                            enemy.enterState(new EnemyTakeHitRight());
-                        }
-                        else{
-                            enemy.enterState(new EnemyTakeHitLeft());
-                        } 
-                    }
-                }
-                else{
-                    if(enemy.lastDirection === "right"){
-                        enemy.enterState(new EnemyDeathRight());
-                    }
-                    else{
-                        enemy.enterState(new EnemyDeathLeft());
-                    }
-                }
-
                 this.game.heroStateMachine.enterState(new HeroIdleLeft(this.game));
             }
     }
