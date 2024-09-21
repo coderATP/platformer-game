@@ -70,13 +70,13 @@ export class LoadingState extends GameState{
        
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update();
         //Go to MenuState once all assets are finished loading
         if (this.game.assetManager.loadedAssets === this.game.assetManager.assetsToLoad) {
             this.game.ui.loading_startBtn.innerText = "all assets loaded, press anywhere to start";
             this.game.ui.loading_startBtn.addEventListener('click', (e) => {
-                //this.game.toggleFullscreen();
+               // this.game.toggleFullscreen();
                 this.game.gsm.enterState(this.game.STATES.MENU);
             })
         }
@@ -97,7 +97,7 @@ export class MenuState extends GameState{
         
     }
     
-    update(deltaTime)
+    update(ctx, deltaTime)
     {
         super.update();
         //go to level-select state
@@ -142,8 +142,8 @@ export class PlayState extends GameState{
     render(ctx, deltaTime){
      
         //temp playstate render methods
-        this.game.backdrop.render(ctx);
-        this.game.background.render(ctx);
+       // this.game.backdrop.render(ctx);
+      //  this.game.background.render(ctx);
         this.game.map.render(ctx);
         //this.game.collisionBlock.render(level1_solidMap2D, ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
@@ -156,11 +156,10 @@ export class PlayState extends GameState{
         this.game.player.render(ctx);
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update();
         if (!this.game.paused) {
-            this.game.backdrop.update();
-            this.game.background.update();
+
             this.game.enemies.forEach(enemy=>{enemy.update(deltaTime)});
 
             this.game.player.update(deltaTime);
@@ -187,14 +186,14 @@ export class PlayState extends GameState{
                 this.game.gsm.enterState(this.game.STATES.PAUSE);
                 this.game.input.keypressed = false;
             }
-        }) 
+        })
     }
 }
 
 export class FadeIn extends GameState{
     
     start(){
-        this.game.paused = true;
+        this.game.paused = false;
         this.hideAllScreens();
         this.show(this.playScreen, "block");
         this.show(this.playSceneCurtain, "grid");
@@ -207,8 +206,8 @@ export class FadeIn extends GameState{
         this.game.audio.stop(this.game.audio.menuSong);
     }
     render(ctx, deltaTime){
-        this.game.backdrop.render(ctx);
-        this.game.background.render(ctx);
+       // this.game.backdrop.render(ctx);
+       // this.game.background.render(ctx);
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{enemy.render(ctx)});
@@ -221,7 +220,7 @@ export class FadeIn extends GameState{
         this.playSceneCurtain.style.opacity = this.opacity;
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         this.curtainsUp();
         if(this.opacity <= 0) this.game.gsm.enterState(this.game.STATES.PLAY);
     }
@@ -239,9 +238,8 @@ export class FadeOut extends GameState{
         this.opacity = 0;
     }
     render(ctx, deltaTime){
-        
-        this.game.backdrop.render(ctx);
-        this.game.background.render(ctx);
+       // this.game.backdrop.render(ctx);
+       // this.game.background.render(ctx);
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{enemy.render(ctx)});
@@ -255,7 +253,7 @@ export class FadeOut extends GameState{
         this.playSceneCurtain.style.opacity = this.opacity;
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update();
         this.curtainsDown();
         if(this.opacity >= 1) this.game.gsm.enterState(this.game.STATES.LEVELCOMPLETE);
@@ -280,7 +278,7 @@ export class PauseState extends GameState{
         this.game.player.render(ctx);
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update()
         //resume
         this.game.ui.pause_resumeBtn.addEventListener("click", ()=>{
@@ -317,7 +315,7 @@ export class RestartConfirmState extends GameState{
     }
     
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update()
         //back to pause (no button clicked)
         this.game.ui.restart_noBtn.addEventListener("click", ()=>{
@@ -434,26 +432,21 @@ export class LevelSelectState extends GameState{
         this.game.ui.levelDescription.innerText = imageDescriptions[this.imageIndex];
         //(E) CURRENT LEVEL TO THE SELECTED LEVEL BASED ON IMAGE-INDEX VALUE
         this.setSelectedLevel();
-        
     }
     
-    enterSelectedLevel(){
-        if(this.game.input.keys[0] == "levelSelect_enter"){
-            //this.game.audio.play(this.game.audio.buttonSound);
-            this.setSelectedLevel();
-            this.game.gsm.enterState(new FadeIn(this.game));
-        }
-    }
     render(ctx, deltaTime){
         this.renderScreenshot();
     }
     
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         //NAVIGATE THROUGH THE LEVELS USING ARROWS/CIRCLES
         this.navigateLevels();
         //GO TO SELECTED LEVEL WHEN "ENTER" KEY IS PRESSED
-        this.enterSelectedLevel();
+        if (this.game.input.keys[0] == "levelSelect_enter") {
+                this.setSelectedLevel();
+                this.game.gsm.enterState(new FadeIn(this.game));
+        }
         //UPDATE ANY CODE INSIDE THE INTERFACE
         super.update();
         
@@ -483,7 +476,7 @@ export class LevelCompleteState extends GameState{
     }
     
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update();
         //end-of-level-summary
         this.scoreSection = document.getElementById("score");
@@ -507,15 +500,16 @@ export class LevelCompleteState extends GameState{
                 this.game.input.keypressed = false;
             }
         }
+      
         if(this.game.input.keys[0] == "levelComplete_nextBtn" && this.game.input.keypressed){
             if (this.game.currentLevel.id === "ruins") {
                 this.game.currentLevel = this.game.levels[0];
-                this.game.currentLevel.reset();  
+                this.game.currentLevel.reset();
+
                 this.game.gsm.enterState(this.game.STATES.FADEIN);
                 this.game.input.keypressed = false;
             }
         }
-
         //GO TO MENU
         //update to next level before exiting
         //so that "continue" on the main menu can take us straight to the next level 
@@ -530,8 +524,6 @@ export class LevelCompleteState extends GameState{
                 this.game.currentLevel.reset();
                 this.game.gsm.enterState(this.game.STATES.MENU);
             }
-            //this.game.gsm.enterState(this.game.STATES.MENU);
- 
         })
     }
 }
@@ -548,7 +540,7 @@ export class GameOverState extends GameState{
     render(ctx, deltaTime){
     }
     
-    update(deltaTime){
+    update(ctx, deltaTime){
         super.update()
         //resume
         
@@ -568,7 +560,7 @@ export class OptionsState extends GameState{
         
     }
 
-    update(deltaTime){
+    update(ctx, deltaTime){
         this.game.ui.volume_controllers.forEach(controller=>{
             controller.addEventListener('change', (e)=>{
                 if(e.target.id == "options_sfx"){
@@ -604,9 +596,8 @@ export class GSM{
         this.currentState.start();
     }
     
-    updateState(deltaTime){
-
-        this.currentState.update(deltaTime);
+    updateState(ctx,deltaTime){
+        this.currentState.update(ctx, deltaTime);
     }
     
     renderState(ctx, deltaTime){
