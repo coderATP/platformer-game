@@ -1,7 +1,6 @@
 import { level1_immobile_liquidMap2D, level1_solidMap2D, level2_solidMap2D, level2_immobile_liquidMap2D } from "./mapData.js";
 import { HorizontallyMovingCollisionBlock, VerticallyMovingCollisionBlock } from "./collisionblock.js";
 import { Rectangle } from "./rectangle.js";
-import { HeroFallRight } from "./hero.js";
 
 export class Forest{
     constructor(game){
@@ -16,6 +15,7 @@ export class Forest{
         this.resetEnemyPos();
         this.game.numberOfBasicEnemies = 10;
         this.game.numberOfBosses = 1;
+        this.numOfMaps = 3;
     }
     //reset all parameters to default values
     reset(){
@@ -25,7 +25,7 @@ export class Forest{
         this.resetPlayerPos();
         this.resetEnemyPos();
         this.game.player.score = 0;
-        this.game.exitDoor = new Rectangle(2520, 0, this.game.tileSize, this.game.tileSize);
+        this.game.exitDoor = new Rectangle(5760-this.game.tileSize, 0, this.game.tileSize, this.game.tileSize);
         this.id = "forest";
     }
     //reset only parameters needed to restart a level
@@ -35,9 +35,10 @@ export class Forest{
         this.game.player.score = 0;
     }
     resetMap(){
-        //this.game.background.setWorld(this.game.assetManager.images[3]);
-       // this.game.backdrop.setWorld(this.game.assetManager.images[3]);
-        this.game.map.setWorld(this.game.assetManager.images[3]);
+       this.game.background.set(this.game.assetManager.images[0]);
+       this.game.clouds.set(this.game.assetManager.images[1]);
+       this.game.bushes.set(this.game.assetManager.images[2]);       
+       this.game.map.set(this.game.assetManager.images[3]);
     }
     resetCollisionBlocks(){
         this.game.solidBlocks = this.game.collisionBlock.create(level1_solidMap2D);
@@ -51,8 +52,8 @@ export class Forest{
          ];
     }
     resetPlayerPos(){
-        this.game.player.x = 0;
-        this.game.player.y = 5 * this.game.tileSize;
+        this.game.player.x = 10 * this.game.tileSize;
+        this.game.player.y = 3 * this.game.tileSize;
     }
     resetEnemyPos(){
         //deactivate all the enemies in the pool first
@@ -89,6 +90,8 @@ export class Ruins{
         //activates only the numberOfBasicEnemies
         this.game.numberOfBasicEnemies = 15;
         this.game.numberOfBosses = 1;
+        this.numOfMaps = 3;
+
     }
     
     //reset all parameters to default values
@@ -130,13 +133,14 @@ export class Ruins{
          ];
     }
     resetMap(){
-        this.game.map.setWorld(this.game.assetManager.images[11]);
-        //this.game.background.setWorld(this.game.assetManager.images[11]);
-        //this.game.backdrop.setWorld(this.game.assetManager.images[11]); 
-    }
+        this.game.background.set(this.game.assetManager.images[11]);
+        this.game.clouds.set(this.game.assetManager.images[1]);
+        this.game.bushes.set(this.game.assetManager.images[2]);     
+        this.game.map.set(this.game.assetManager.images[12]); 
+     }
     resetPlayerPos(){
-        this.game.player.x = 0;
-        this.game.player.y = 9 * this.game.tileSize;;
+        this.game.player.x = 0 * this.game.tileSize;
+        this.game.player.y = 9 * this.game.tileSize;
     }
     resetEnemyPos(){
         //deactivate all the enemies in the pool first

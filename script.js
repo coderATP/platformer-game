@@ -2,8 +2,8 @@ import { Game } from "./_game.js";
 
 window.addEventListener('load', ()=>{
     const canvas = document.getElementById('canvas');
-    canvas.width = 1024 || 5120;
-    canvas.height = 576;
+    canvas.width = 16*64
+    canvas.height = 9*64;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     

@@ -2,18 +2,14 @@ import { AssetManager } from "./assetManager.js"
 import { Camera } from "./camera.js"
 import { LoadingState, MenuState, LevelSelectState, FadeIn, PlayState, PauseState, RestartConfirmState, GSM, FadeOut, LevelCompleteState, GameOverState, OptionsState } from "./state.js"
 import { Input } from "./input.js"
-import { Map } from "./map.js"
+import { Map, BackgroundLayer } from "./map.js"
 import { Hero, HeroStateMachine } from "./hero.js"
 import { UI } from "./ui.js"
-import { level1_solidMap2D, level1_immobile_liquidMap2D, level2_solidMap2D, level2_immobile_liquidMap2D } from "./mapData.js";
-import { CollisionBlock, HorizontallyMovingCollisionBlock, VerticallyMovingCollisionBlock } from "./collisionblock.js"
-import { Rectangle } from "./rectangle.js"
+import { CollisionBlock } from "./collisionblock.js"
 import { drawCharacterStatus, drawEnemyhealthbar, drawPlayerenergybar, drawPlayerhealthbar, drawPlayerScore, drawHeroStatus } from "./utils.js"
-import { lerp } from "./ease.js"
 import { Forest, Ruins } from "./levels.js"
 import { Enemy } from "./enemypool.js"
 import { AudioControl } from "./audio.js"
-import { FloatingMessage } from "./floatingMessage.js"
 
 export class Game{
     constructor(canvas){
@@ -21,7 +17,7 @@ export class Game{
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         
-        this.tileSize = 40;
+        this.tileSize = 48;
         this.rows = Math.ceil(this.height/this.tileSize);
         this.columns = Math.ceil(this.width/this.tileSize);
         
@@ -35,13 +31,16 @@ export class Game{
 
         //MAP, PLAYER AND CAMERA
         this.map = new Map(this);
-        //this.backdrop = new Map(this);
-        //this.background = new Map(this);
+        this.background = new BackgroundLayer(this, 0.3);
+        this.clouds = new BackgroundLayer(this, 0.3);
+        this.bushes = new BackgroundLayer(this, 0.7);
+        this.backgroundLayers = [this.background, this.clouds, this.bushes];
+
         this.player = new Hero(this);
         this.enemy = new Enemy(this);
         this.enemy.start(400, 0);
         
-        this.camera = new Camera(this, 0, 0, this.width, this.height, this.map.width, this.map.height);
+        this.camera = new Camera(this);
         this.camera.follow(this.player);
         
         //game rows and columns
@@ -107,6 +106,7 @@ export class Game{
         
         //FLOATING MESSAGES
         this.floatingMessages = [];
+        //console
     }
     
     render(ctx, deltaTime){

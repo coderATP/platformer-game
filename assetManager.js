@@ -4,22 +4,25 @@ export class AssetManager{
     constructor(game){
         this.game = game;
         this.imagePaths = [
-               "images/maps/forest-bg.png", //0
-               "images/maps/forest-solid.png", //1
-               "images/maps/forest-backdrop.png", //2
-               "images/maps/forest-complete.png", //3
+            "images/maps/backgroundx3.png", //0
+            "images/maps/cloudsx3.png", //1
+            "images/maps/bushesx3.png", //2
+            "images/maps/foregroundx3.png", //3
         
-               "images/mobile-platforms/mobilePlatform2.png", //4
-               "images/mobile-platforms/mobilePlatform3.png", //5
-               "images/mobile-platforms/mobilePlatform4.png", //6
-               "images/mobile-platforms/mobilePlatform5.png", //7
+            "images/mobile-platforms/mobilePlatform2.png", //4
+            "images/mobile-platforms/mobilePlatform3.png", //5
+            "images/mobile-platforms/mobilePlatform4.png", //6
+            "images/mobile-platforms/mobilePlatform5.png", //7
 
-               "images/particles/star.png", //8
-               
-               "images/samuraiMack/HeroSpritesheet.png", //9
-               "images/kenji/EnemySpritesheet.png", //10
+            "images/particles/star.png", //8
+            
+            "images/samuraiMack/HeroSpritesheet.png", //9
+            "images/kenji/EnemySpritesheet.png", //10
 
-               "images/maps/ruins.png", //11
+            "images/maps/ruins-backgroundx3.png", //11
+            "images/maps/ruins-foregroundx3.png", //12
+            "images/screenshots/forest.jpg", //13
+            "images/screenshots/ruins.jpg", //14
 
             ];
         this.soundPaths = [
@@ -35,11 +38,10 @@ export class AssetManager{
         this.sounds = [];
         
         this.imageDimensions = [
-            [2560, 1440],
-            [2560, 1440],
-            [2560, 1440],
-            [2560, 1440],
-
+            [5760, 3264],
+            [5760, 3264],
+            [5760, 3264],
+            [5760, 3264],
 
             [32, 16],
             [48, 16],
@@ -51,7 +53,12 @@ export class AssetManager{
             [1600, 3600],
             [1600, 3200],
 
-            [5120, 1440],
+            [6144, 1728],
+            [6144, 1728],
+            
+            [1600, 720],
+            [1600, 720],
+
             ];
         
         this.loadedAssets = 0;

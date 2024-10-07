@@ -140,10 +140,9 @@ export class PlayState extends GameState{
 
     
     render(ctx, deltaTime){
-     
-        //temp playstate render methods
-       // this.game.backdrop.render(ctx);
-      //  this.game.background.render(ctx);
+        //bg
+        this.game.backgroundLayers.forEach(layer=>{layer.render(ctx)})
+        //map
         this.game.map.render(ctx);
         //this.game.collisionBlock.render(level1_solidMap2D, ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
@@ -206,23 +205,27 @@ export class FadeIn extends GameState{
         this.game.audio.stop(this.game.audio.menuSong);
     }
     render(ctx, deltaTime){
-       // this.game.backdrop.render(ctx);
-       // this.game.background.render(ctx);
+       //bg
+        this.game.backgroundLayers.forEach(layer=>{layer.render(ctx)})
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{enemy.render(ctx)});
         this.game.player.render(ctx);
     }
     
-    curtainsUp(){
-        if(this.opacity >= 0) this.opacity-= 0.005;
-        setTimeout(this.curtainsUp, 100);
+    curtainsUp(deltaTime){
+        if(this.opacity >= 0){
+            this.opacity-= (deltaTime/2000);
+            setTimeout(()=>{this.curtainsUp(deltaTime)}, 100);
+        }
         this.playSceneCurtain.style.opacity = this.opacity;
     }
     
     update(ctx, deltaTime){
-        this.curtainsUp();
-        if(this.opacity <= 0) this.game.gsm.enterState(this.game.STATES.PLAY);
+        this.curtainsUp(deltaTime);
+        if (this.opacity <= 0) {
+            this.game.gsm.enterState(this.game.STATES.PLAY);
+        } 
     }
 }
 
@@ -238,8 +241,6 @@ export class FadeOut extends GameState{
         this.opacity = 0;
     }
     render(ctx, deltaTime){
-       // this.game.backdrop.render(ctx);
-       // this.game.background.render(ctx);
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{enemy.render(ctx)});
@@ -247,15 +248,17 @@ export class FadeOut extends GameState{
 
     }
     
-    curtainsDown(){
-        if(this.opacity < 1) this.opacity+= 0.005;
-        setTimeout(this.curtainsDown, 100);
+    curtainsDown(deltaTime){
+        if(this.opacity < 1){
+            this.opacity+= deltaTime/2000;
+            setTimeout(()=>{this.curtainsDown(deltaTime)}, 100);
+        }
         this.playSceneCurtain.style.opacity = this.opacity;
     }
     
     update(ctx, deltaTime){
         super.update();
-        this.curtainsDown();
+        this.curtainsDown(deltaTime);
         if(this.opacity >= 1) this.game.gsm.enterState(this.game.STATES.LEVELCOMPLETE);
         }
 }
@@ -270,8 +273,6 @@ export class PauseState extends GameState{
     }
     
     render(ctx, deltaTime){
-        this.game.backdrop.render(ctx);
-        this.game.background.render(ctx);
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{ enemy.render(ctx);});
@@ -306,8 +307,6 @@ export class RestartConfirmState extends GameState{
     }
     
     render(ctx, deltaTime){
-        this.game.backdrop.render(ctx);
-        this.game.background.render(ctx);
         this.game.map.render(ctx);
         this.game.mobileBlocks.forEach(block => { block.render(ctx) });
         this.game.enemies.forEach(enemy=>{ enemy.render(ctx);});

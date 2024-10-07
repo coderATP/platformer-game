@@ -1,16 +1,16 @@
 export class Camera{
-    constructor(game, viewportX, viewportY, viewportWidth, viewportHeight, worldWidth, worldHeight){
+    constructor(game){
         this.game = game;
         
         this.xDeadZone = this.game.width * 0.5;
         this.yDeadZone = this.game.height * 0.5;
         
-        this.viewportX = viewportX || 0;
-        this.viewportY = viewportY || 0;
-        this.viewportWidth = viewportWidth;
-        this.viewportHeight = viewportHeight;
-        this.worldWidth = worldWidth;
-        this.worldHeight = worldHeight;
+        this.viewportX = 0;
+        this.viewportY = 0;
+        this.viewportWidth = this.game.width;
+        this.viewportHeight = this.game.height;
+        this.worldWidth = this.game.map.width;
+        this.worldHeight = this.game.map.height;
 
         this.cameraPerson = null;
         
